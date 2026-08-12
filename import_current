@@ -41,6 +41,11 @@ done
 mkdir -p ./systemd/user
 cp -f "$HOME"/.config/systemd/user/*.service "$HOME"/.config/systemd/user/*.path ./systemd/user/
 
+# Global agent prompts (shared with personal-server's home/felipe/agents/)
+mkdir -p ./agents
+cp -f "$HOME/.claude/CLAUDE.md" ./agents/claude-global.md
+cp -f "$HOME/.codex/AGENTS.md" ./agents/codex-global.md
+
 # Package + service reality
 pacman -Qqen > pkglist-native.txt
 pacman -Qqem > pkglist-aur.txt

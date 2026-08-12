@@ -22,6 +22,8 @@ wallust/                          theming hub: wallpaper → wallust → every a
 ghostty/ tmux/ zsh/ starship/     terminal stack (ghostty auto-attaches tmux session "main")
 nvim/                             clean-slate 0.12 config, vim.pack + lockfile, no Mason
 lazygit/ opencode/                git UI + agent
+agents/                           global agent prompts → ~/.claude/CLAUDE.md, ~/.codex/AGENTS.md
+                                  (shared text with personal-server's home/felipe/agents/)
 git/ gtk-3.0/ gtk-4.0/ btop/      the long tail, incl. mimeapps.list, user-dirs.dirs,
 MangoHud/ xkb/                    custom XKB layout "cust"
 ```

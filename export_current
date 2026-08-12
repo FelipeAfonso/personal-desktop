@@ -24,3 +24,8 @@ done
 
 mkdir -p "$HOME/.config/systemd/user"
 cp -f ./systemd/user/* "$HOME/.config/systemd/user/"
+
+# Global agent prompts (shared with personal-server's home/felipe/agents/)
+mkdir -p "$HOME/.claude" "$HOME/.codex"
+cp -f ./agents/claude-global.md "$HOME/.claude/CLAUDE.md"
+cp -f ./agents/codex-global.md "$HOME/.codex/AGENTS.md"
