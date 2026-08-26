@@ -1,7 +1,6 @@
 appimagelauncher
 archon-appimage
 insync
-opencode-bin
 plex-media-server
 qnapi
 raiderio-client

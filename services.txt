@@ -29,7 +29,7 @@ fstrim.timer
 snapper-cleanup.timer
 
 # user
-t3code-hide-appimagekit.path
+hide-appimagekit-entries.path
 appimagelauncherd.service
 t3code.service
 wireplumber.service

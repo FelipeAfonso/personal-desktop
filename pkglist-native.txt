@@ -39,7 +39,6 @@ cachyos-wallpapers
 cachyos-zsh-config
 cantarell-fonts
 chwd
-claude-code
 cliphist
 cpupower
 cryptsetup
@@ -73,9 +72,9 @@ go
 grimblast-git
 gst-libav
 gst-plugin-pipewire
+gst-plugin-va
 gst-plugins-bad
 gst-plugins-ugly
-gst-plugin-va
 hdparm
 hwdetect
 hwinfo
@@ -111,8 +110,8 @@ lua-language-server
 lutris
 lvm2
 man-db
-mangohud
 man-pages
+mangohud
 mdadm
 meld
 mesa-utils
@@ -138,13 +137,13 @@ noto-fonts-emoji
 npm
 nss-mdns
 ntfs-3g
+ntfsprogs
 nushell
 nvm
 octopi
 odin
 odinfmt
 ols
-openai-codex
 opencl-mesa
 openlinkhub
 openssh
@@ -178,10 +177,10 @@ rocm-smi-lib
 rofi
 rsync
 rust-analyzer
+s-nail
 sddm
 sg3_utils
 smartmontools
-s-nail
 snapper
 sof-firmware
 sops
