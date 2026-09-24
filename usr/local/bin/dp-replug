@@ -1,0 +1,31 @@
+#!/bin/sh
+# dp-replug: software unplug/replug of the FO48U on DP-3. The monitor sometimes
+# wakes from a power-button off without re-asserting hotplug, so the kernel
+# never sees it come back and it sits on "no DP signal" until the cable is
+# pulled. amdgpu's debugfs trigger_hotplug fakes that pull.
+#
+# Root-owned in /usr/local/bin, allowed without a password by
+# etc/sudoers.d/dp-replug, bound to SUPER+CTRL+D in hyprland.lua. Takes no
+# arguments on purpose: sudoers allows exactly this command.
+set -eu
+
+connector=DP-3
+
+status() { cat /sys/class/drm/card*-"$connector"/status 2>/dev/null || echo unknown; }
+
+trigger=
+for f in /sys/kernel/debug/dri/*/"$connector"/trigger_hotplug; do
+  if [ -e "$f" ]; then trigger=$f; break; fi
+done
+if [ -z "$trigger" ]; then
+  logger -s -t dp-replug "no trigger_hotplug for $connector under /sys/kernel/debug/dri"
+  exit 1
+fi
+
+# before/after status lands in the journal: journalctl -t dp-replug
+logger -t dp-replug "before: $connector $(status)"
+echo 0 > "$trigger"
+sleep 1
+echo 1 > "$trigger"
+sleep 2
+logger -t dp-replug "after: $connector $(status)"
