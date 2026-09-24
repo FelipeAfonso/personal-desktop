@@ -51,10 +51,14 @@ MangoHud/ xkb/                    custom XKB layout "cust"
   From that repo, run `python3 scripts/sync-agent-prompts.py ../personal-desktop`
   to check for drift. Add `--write` to copy updates onto a clean task branch.
   Commit the copies here, then deploy with `./export_current --agents-only`.
-  This mode installs only agent instructions, vendored skills, and hook
-  scripts. A normal export includes the same agent files. Edit the repo
-  sources, not the generated files. Skills and hooks are installed the same
-  way. The unslop hooks *block* in `~/.claude/settings.json` is the one
+  This mode installs only agent instructions, references, vendored skills,
+  and hook scripts. A normal export includes the same agent files. Edit the repo
+  sources, not the generated files. Procedures in `agents/references/` install
+  under `~/.agents/references/` and are read only when a task needs them.
+  Shared references sync from personal-server; `miskatonic.md` stays local.
+  The [model catalog brief](agents/references/model-usage.md) describes the
+  current assignments and expected relative usage. Skills and hooks are installed
+  the same way. The unslop hooks *block* in `~/.claude/settings.json` is the one
   by-hand piece (Claude Code rewrites that file at runtime — same deal as on
   rlyeh):
 

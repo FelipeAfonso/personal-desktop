@@ -46,6 +46,10 @@ mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.config/opencode"
 { cat ./agents/codex-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.codex/AGENTS.md"
 { cat ./agents/opencode-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.config/opencode/AGENTS.md"
 
+# References are loaded only for tasks that need their procedures.
+mkdir -p "$HOME/.agents/references"
+cp -f ./agents/references/*.md "$HOME/.agents/references/"
+
 # Skills vendored in the repo so a fresh install has them. Claude Code reads
 # ~/.claude/skills; codex and opencode both read ~/.agents/skills. Other
 # entries in those dirs (installed with `npx skills add ...`) are left alone.
