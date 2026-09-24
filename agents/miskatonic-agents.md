@@ -18,8 +18,11 @@ must survive the desktop going away belongs on rlyeh (see the fleet below).
   `agents/*.md` from that repo into `~/.claude/CLAUDE.md`,
   `~/.codex/AGENTS.md`, and `~/.config/opencode/AGENTS.md`. To change them,
   edit the repo files and re-export; edits to the generated files are lost on
-  the next export. The shared (non-machine) sections are kept in sync by hand
-  with `home/felipe/agents/*.md` in personal-server.
+  the next export. Shared sources live in
+  personal-server under `home/felipe/agents/`. Use that repo's
+  `scripts/sync-agent-prompts.py` to check or update this repo's copies.
+  `./export_current --agents-only` applies agent instructions, skills, and
+  hook scripts without exporting unrelated desktop configs.
 - sudo asks for Felipe's password. Don't build automation that assumes
   unattended root; surface the sudo step so he can run or approve it.
 - Secrets: `secrets-pull` decrypts the private sops/age secrets repo into

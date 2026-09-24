@@ -44,14 +44,16 @@ MangoHud/ xkb/                    custom XKB layout "cust"
   zsh/opencode/nvim pick up the palette → `hypr/scripts/apply-theme.sh`
   reloads everything. The generated color files are committed on purpose:
   current wallpaper state is part of the machine.
-- **Agent config is generated, shared with the fleet.** `export_current`
-  concatenates `agents/<cli>-global.md` and `agents/models.md` (the sections
-  shared with rlyeh and yuggoth, kept in sync by hand with personal-server's
-  `home/felipe/agents/*.md` and personal-laptop's `agents/*.md`) with
-  `agents/miskatonic-agents.md` (this machine, the tailnet, how to operate
-  the fleet) into each CLI's global prompt file. Edit the repo files and
-  re-export; never the generated ones. Skills (`agents/skills/`) and the
-  unslop hook scripts (`agents/hooks/`) are vendored and installed the same
+- **Agent config is generated from shared sources.** `export_current`
+  combines `agents/<cli>-global.md`, `agents/models.md`, `agents/workflow.md`,
+  and `agents/miskatonic-agents.md` into each CLI's global instruction file.
+  The shared sources live in personal-server's `home/felipe/agents/`.
+  From that repo, run `python3 scripts/sync-agent-prompts.py ../personal-desktop`
+  to check for drift. Add `--write` to copy updates onto a clean task branch.
+  Commit the copies here, then deploy with `./export_current --agents-only`.
+  This mode installs only agent instructions, vendored skills, and hook
+  scripts. A normal export includes the same agent files. Edit the repo
+  sources, not the generated files. Skills and hooks are installed the same
   way. The unslop hooks *block* in `~/.claude/settings.json` is the one
   by-hand piece (Claude Code rewrites that file at runtime — same deal as on
   rlyeh):

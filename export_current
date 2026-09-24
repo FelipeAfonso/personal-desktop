@@ -3,38 +3,48 @@
 # touched — see README for those steps.
 set -eu
 
-dirs="ghostty dunst hypr nvim opencode rofi tmux waybar wallust xkb zsh starship lazygit btop MangoHud git gtk-3.0 gtk-4.0"
-files="mimeapps.list user-dirs.dirs"
+case "${1-}" in
+  ""|--agents-only) ;;
+  *) echo "Usage: ./export_current [--agents-only]" >&2; exit 2 ;;
+esac
+if [ "$#" -gt 1 ]; then
+  echo "Usage: ./export_current [--agents-only]" >&2
+  exit 2
+fi
 
-for d in $dirs; do
-  cp -rf "./$d" "$HOME/.config/"
-done
+if [ "${1-}" != --agents-only ]; then
 
-for f in $files; do
-  cp -f "./$f" "$HOME/.config/"
-done
+  dirs="ghostty dunst hypr nvim opencode rofi tmux waybar wallust xkb zsh starship lazygit btop MangoHud git gtk-3.0 gtk-4.0"
+  files="mimeapps.list user-dirs.dirs"
 
-cp -f ./zsh/.zshenv "$HOME/.zshenv"
+  for d in $dirs; do
+    cp -rf "./$d" "$HOME/.config/"
+  done
 
-mkdir -p "$HOME/.local/bin"
-cp -f ./bin/* "$HOME/.local/bin/"
-for s in ./bin/*; do
-  chmod +x "$HOME/.local/bin/$(basename "$s")"
-done
+  for f in $files; do
+    cp -f "./$f" "$HOME/.config/"
+  done
 
-mkdir -p "$HOME/.config/systemd/user"
-# -r: unit drop-in dirs (*.service.d) ship alongside the flat unit files
-cp -rf ./systemd/user/* "$HOME/.config/systemd/user/"
+  cp -f ./zsh/.zshenv "$HOME/.zshenv"
 
-# Global agent prompts, one generated file per CLI: the per-CLI section,
-# the shared model table (models.md), then the miskatonic operating notes.
-# The first two are kept in sync by hand with personal-server's
-# home/felipe/agents/*.md and personal-laptop's agents/*.md. Edit agents/*.md and re-run; never
-# edit the generated files in place.
+  mkdir -p "$HOME/.local/bin"
+  cp -f ./bin/* "$HOME/.local/bin/"
+  for s in ./bin/*; do
+    chmod +x "$HOME/.local/bin/$(basename "$s")"
+  done
+
+  mkdir -p "$HOME/.config/systemd/user"
+  # -r: unit drop-in dirs (*.service.d) ship alongside the flat unit files
+  cp -rf ./systemd/user/* "$HOME/.config/systemd/user/"
+
+fi
+
+# Shared sources come from personal-server via scripts/sync-agent-prompts.py.
+# Append this machine's notes when generating the installed instructions.
 mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.config/opencode"
-{ cat ./agents/claude-global.md; echo; cat ./agents/models.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.claude/CLAUDE.md"
-{ cat ./agents/codex-global.md; echo; cat ./agents/models.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.codex/AGENTS.md"
-{ cat ./agents/opencode-global.md; echo; cat ./agents/models.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.config/opencode/AGENTS.md"
+{ cat ./agents/claude-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.claude/CLAUDE.md"
+{ cat ./agents/codex-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.codex/AGENTS.md"
+{ cat ./agents/opencode-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.config/opencode/AGENTS.md"
 
 # Skills vendored in the repo so a fresh install has them. Claude Code reads
 # ~/.claude/skills; codex and opencode both read ~/.agents/skills. Other
