@@ -142,6 +142,8 @@ hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("grimblast copy area"))
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"))
 hl.bind(mainMod .. " + ALT + A", hl.dsp.exec_cmd("grimblast --freeze copy area"))
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh"))
+-- FO48U woke up to "no DP signal": fake a cable replug (usr/local/bin/dp-replug)
+hl.bind(mainMod .. " + CONTROL + D", hl.dsp.exec_cmd("sudo -n /usr/local/bin/dp-replug"), { locked = true })
 
 hl.bind(mainMod .. " + bracketright", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"))
 hl.bind(mainMod .. " + bracketleft", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"))

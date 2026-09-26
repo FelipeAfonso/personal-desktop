@@ -1,0 +1,2 @@
+# Passwordless software replug of the FO48U, see usr/local/bin/dp-replug.
+felipe ALL=(root) NOPASSWD: /usr/local/bin/dp-replug
