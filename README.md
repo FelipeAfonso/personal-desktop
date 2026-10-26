@@ -53,6 +53,8 @@ MangoHud/ xkb/                    custom XKB layout "cust"
   From that repo, run `python3 scripts/sync-agent-prompts.py ../personal-desktop`
   to check for drift. Add `--write` to copy updates onto a clean task branch.
   Commit the copies here, then deploy with `./export_current --agents-only`.
+  This includes all nine [tstack skills](agents/skills/tstack/README.md),
+  installed into `~/.claude/skills/` and `~/.agents/skills/` with their helpers.
   This mode installs only agent instructions, references, vendored skills,
   and hook scripts. A normal export includes the same agent files. Edit the repo
   sources, not the generated files. Procedures in `agents/references/` install
