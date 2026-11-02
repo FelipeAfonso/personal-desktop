@@ -57,6 +57,8 @@ mkdir -p "$HOME/.claude/skills" "$HOME/.agents/skills"
 cp -rf ./agents/skills/plan-html-workflow "$HOME/.claude/skills/"
 cp -rf ./agents/skills/unslop "$HOME/.claude/skills/"
 cp -rf ./agents/skills/unslop "$HOME/.agents/skills/"
+cp -rpf ./agents/skills/nyarlathotep "$HOME/.claude/skills/"
+cp -rpf ./agents/skills/nyarlathotep "$HOME/.agents/skills/"
 for skill in ./agents/skills/tstack/*/; do
   cp -rpf "$skill" "$HOME/.claude/skills/"
   cp -rpf "$skill" "$HOME/.agents/skills/"
