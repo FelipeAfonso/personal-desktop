@@ -104,6 +104,8 @@ MangoHud/ xkb/                    custom XKB layout "cust"
    sudo cp etc/sddm.conf /etc/sddm.conf
    sudo cp etc/sysctl.d/99-swappiness.conf /etc/sysctl.d/
    sudo cp etc/paru.conf /etc/paru.conf
+   sudo install -D -m 0644 etc/pacman.d/hooks/99-openlinkhub-enable.hook /etc/pacman.d/hooks/99-openlinkhub-enable.hook
+   sudo systemctl enable --now openlinkhub.service
    sudo install -o root -g root -m 0755 usr/local/bin/dp-replug /usr/local/bin/
    sudo install -o root -g root -m 0440 etc/sudoers.d/dp-replug /etc/sudoers.d/
    ```
@@ -157,6 +159,14 @@ Keys in `miskatonic.yaml` are UPPER_SNAKE (`ANTHROPIC_API_KEY: sk-ant-…`)
 because they land in the shell environment verbatim — see
 `miskatonic.yaml.example` in the secrets repo. Rotate by editing with `sops`
 and re-running `secrets-pull`.
+
+## OpenLinkHub startup
+
+The OpenLinkHub package disables and stops its service before upgrading, but
+does not re-enable it afterward. Our pacman hook restores automatic startup
+and starts the service after each install or upgrade. A brief interruption
+during an upgrade is expected. The hook does not run on package removal.
+Install it with the command in step 3 above; no full config export is needed.
 
 ## Day-to-day
 
