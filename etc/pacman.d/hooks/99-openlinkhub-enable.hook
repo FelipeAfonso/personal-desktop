@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = openlinkhub
+
+[Action]
+Description = Restore OpenLinkHub automatic startup after package updates
+When = PostTransaction
+Depends = openlinkhub
+Exec = /usr/bin/systemctl enable --now openlinkhub.service
