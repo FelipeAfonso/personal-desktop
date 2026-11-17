@@ -55,6 +55,8 @@ MangoHud/ xkb/                    custom XKB layout "cust"
   Commit the copies here, then deploy with `./export_current --agents-only`.
   This includes all nine [tstack skills](agents/skills/tstack/README.md) and
   the [nyarlathotep](agents/skills/nyarlathotep/SKILL.md) HEY email skill,
+  and the [pr-review](agents/skills/pr-review/SKILL.md) skill that reviews
+  every PR on the Claude and Codex subscriptions,
   installed into `~/.claude/skills/` and `~/.agents/skills/` with their helpers.
   This mode installs only agent instructions, references, vendored skills,
   and hook scripts. A normal export includes the same agent files. Edit the repo
