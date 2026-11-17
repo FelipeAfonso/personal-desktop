@@ -77,6 +77,7 @@ button:hover {
 #memory,
 #custom-temps,
 #custom-health,
+#custom-yog,
 #pulseaudio,
 #wireplumber,
 #custom-media,
@@ -199,4 +200,22 @@ label:focus {
 #custom-health.inactive {
     background-color: alpha(@background, 0.45);
     color: @foreground;
+}
+
+/* yog: next commitment. Quiet by default, filled when it is close or running. */
+#custom-yog.soon,
+#custom-yog.now {
+    background-color: @color2;
+    color: @background;
+}
+
+#custom-yog.free,
+#custom-yog.empty {
+    color: alpha(@foreground, 0.6);
+}
+
+#custom-yog.stale,
+#custom-yog.offline {
+    font-style: italic;
+    color: alpha(@foreground, 0.6);
 }
