@@ -22,6 +22,13 @@ gi.require_version("GtkLayerShell", "0.1")
 gi.require_version("WebKit2", "4.1")
 from gi.repository import Gdk, GLib, Gtk, GtkLayerShell, WebKit2  # noqa: E402
 
+try:  # PyGObject 3.52 moved the unix helpers out of GLib
+    from gi.repository import GLibUnix
+
+    signal_add = GLibUnix.signal_add
+except ImportError:
+    signal_add = GLib.unix_signal_add
+
 URL = os.environ.get("YOG_URL", "https://yog.felipeafonso.com")
 HOST = urlparse(URL).netloc
 WIDTH, MAX_HEIGHT = 400, 860
@@ -67,7 +74,11 @@ class Panel:
         self.window.add(self.view)
 
         self.window.connect("key-press-event", self.on_key)
-        self.window.connect("focus-out-event", lambda *_: self.hide())
+        # GTK reports a focus-out as the surface maps, before it ever had
+        # focus. Only a real loss of focus closes the panel.
+        self.focused = False
+        self.window.connect("focus-in-event", self.on_focus_in)
+        self.window.connect("focus-out-event", self.on_focus_out)
         self.window.connect("delete-event", lambda *_: self.hide() or True)
         self.view.load_uri(URL)
 
@@ -83,7 +94,17 @@ class Panel:
         self.window.present()
 
     def hide(self):
+        self.focused = False
         self.window.hide()
+
+    def on_focus_in(self, *_):
+        self.focused = True
+        return False
+
+    def on_focus_out(self, *_):
+        if self.focused:
+            self.hide()
+        return False
 
     def toggle(self):
         self.hide() if self.window.get_visible() else self.show()
@@ -125,8 +146,8 @@ def main():
     with open(PIDFILE, "w") as f:
         f.write(str(os.getpid()))
     panel = Panel()
-    GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGUSR1, panel.toggle)
-    GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, Gtk.main_quit)
+    signal_add(GLib.PRIORITY_DEFAULT, signal.SIGUSR1, panel.toggle)
+    signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, Gtk.main_quit)
     if not hidden:
         panel.show()
     try:
