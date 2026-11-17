@@ -31,7 +31,10 @@ except ImportError:
 
 URL = os.environ.get("YOG_URL", "https://yog.felipeafonso.com")
 HOST = urlparse(URL).netloc
-WIDTH, MAX_HEIGHT = 400, 860
+# The page is designed for a 400 px wide phone. On a 4K monitor at scale 1
+# that is tiny next to the bar, so the panel zooms it and grows to match.
+ZOOM = float(os.environ.get("YOG_ZOOM", "1.5"))
+WIDTH, MAX_HEIGHT = round(400 * ZOOM), round(860 * ZOOM)
 GRACE_US = 700_000
 PIDFILE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "yog-panel.pid")
 DATA = os.path.join(GLib.get_user_data_dir(), "yog-panel")
@@ -70,6 +73,7 @@ class Panel:
         paper = Gdk.RGBA()
         paper.parse("#efe6d2")
         self.view.set_background_color(paper)
+        self.view.set_zoom_level(ZOOM)
         self.view.connect("decide-policy", self.on_policy)
         self.view.connect("create", self.on_create)
         self.window.add(self.view)
