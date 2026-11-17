@@ -85,7 +85,8 @@
   },
   "custom/yog": {
     "exec": "$HOME/.config/waybar/yog.sh",
-    "on-click": "xdg-open https://yog.felipeafonso.com",
+    "on-click": "$HOME/.config/waybar/yog-panel.py",
+    "on-click-right": "xdg-open https://yog.felipeafonso.com",
     "return-type": "json",
     "format": "{text}",
     "interval": 60,
