@@ -32,6 +32,7 @@ except ImportError:
 URL = os.environ.get("YOG_URL", "https://yog.felipeafonso.com")
 HOST = urlparse(URL).netloc
 WIDTH, MAX_HEIGHT = 400, 860
+GRACE_US = 700_000
 PIDFILE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "yog-panel.pid")
 DATA = os.path.join(GLib.get_user_data_dir(), "yog-panel")
 CACHE = os.path.join(GLib.get_user_cache_dir(), "yog-panel")
@@ -74,10 +75,9 @@ class Panel:
         self.window.add(self.view)
 
         self.window.connect("key-press-event", self.on_key)
-        # GTK reports a focus-out as the surface maps, before it ever had
-        # focus. Only a real loss of focus closes the panel.
-        self.focused = False
-        self.window.connect("focus-in-event", self.on_focus_in)
+        # Focus arrives and leaves again while the surface maps, so losing
+        # focus only closes the panel once it has been up for a moment.
+        self.shown_at = 0
         self.window.connect("focus-out-event", self.on_focus_out)
         self.window.connect("delete-event", lambda *_: self.hide() or True)
         self.view.load_uri(URL)
@@ -90,19 +90,15 @@ class Panel:
 
     def show(self):
         self.size()
+        self.shown_at = GLib.get_monotonic_time()
         self.window.show_all()
         self.window.present()
 
     def hide(self):
-        self.focused = False
         self.window.hide()
 
-    def on_focus_in(self, *_):
-        self.focused = True
-        return False
-
     def on_focus_out(self, *_):
-        if self.focused:
+        if GLib.get_monotonic_time() - self.shown_at > GRACE_US:
             self.hide()
         return False
 
