@@ -41,9 +41,12 @@ fi
 
 # Shared sources come from personal-server via scripts/sync-agent-prompts.py.
 # Append this machine's notes when generating the installed instructions.
-mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.config/opencode"
+mkdir -p "$HOME/.claude" "$HOME/.gemini/config" "$HOME/.config/opencode"
 { cat ./agents/claude-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.claude/CLAUDE.md"
-{ cat ./agents/codex-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.codex/AGENTS.md"
+# Antigravity (agy) loads global rules from ~/.gemini/config.
+{ cat ./agents/antigravity-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.gemini/config/AGENTS.md"
+# The Codex prompt was retired with the OpenAI models.
+rm -f "$HOME/.codex/AGENTS.md"
 { cat ./agents/opencode-global.md; echo; cat ./agents/models.md; echo; cat ./agents/workflow.md; echo; cat ./agents/miskatonic-agents.md; } > "$HOME/.config/opencode/AGENTS.md"
 
 # References are loaded only for tasks that need their procedures.
@@ -51,22 +54,25 @@ mkdir -p "$HOME/.agents/references"
 cp -f ./agents/references/*.md "$HOME/.agents/references/"
 
 # Skills vendored in the repo so a fresh install has them. Claude Code reads
-# ~/.claude/skills; codex and opencode both read ~/.agents/skills. Other
-# entries in those dirs (installed with `npx skills add ...`) are left alone.
-mkdir -p "$HOME/.claude/skills" "$HOME/.agents/skills"
-cp -rf ./agents/skills/plan-html-workflow "$HOME/.claude/skills/"
-cp -rf ./agents/skills/unslop "$HOME/.claude/skills/"
-cp -rf ./agents/skills/unslop "$HOME/.agents/skills/"
-cp -rpf ./agents/skills/nyarlathotep "$HOME/.claude/skills/"
-cp -rpf ./agents/skills/nyarlathotep "$HOME/.agents/skills/"
-# Replace rather than merge, so a removed helper does not linger.
-rm -rf "$HOME/.claude/skills/pr-review" "$HOME/.agents/skills/pr-review"
-cp -rpf ./agents/skills/pr-review "$HOME/.claude/skills/"
-cp -rpf ./agents/skills/pr-review "$HOME/.agents/skills/"
-for skill in ./agents/skills/tstack/*/; do
-  cp -rpf "$skill" "$HOME/.claude/skills/"
-  cp -rpf "$skill" "$HOME/.agents/skills/"
+# ~/.claude/skills, opencode reads ~/.agents/skills, and antigravity reads
+# ~/.gemini/config/skills. Other entries in those dirs (installed with
+# `npx skills add ...`) are left alone.
+skill_dirs="$HOME/.claude/skills $HOME/.agents/skills $HOME/.gemini/config/skills"
+for dir in $skill_dirs; do
+  mkdir -p "$dir"
+  # Retired with the OpenAI models; a plain copy would leave it installed.
+  rm -rf "$dir/sol-loop"
+  cp -rf ./agents/skills/unslop "$dir/"
+  cp -rpf ./agents/skills/nyarlathotep "$dir/"
+  # Replace rather than merge, so a removed helper does not linger.
+  rm -rf "$dir/pr-review"
+  cp -rpf ./agents/skills/pr-review "$dir/"
+  for skill in ./agents/skills/tstack/*/; do
+    # A directory left empty by a retired skill is not a skill.
+    if [ -f "$skill/SKILL.md" ]; then cp -rpf "$skill" "$dir/"; fi
+  done
 done
+cp -rf ./agents/skills/plan-html-workflow "$HOME/.claude/skills/"
 
 # Hook scripts referenced by ~/.claude/settings.json. That file stays mutable
 # (Claude Code writes to it at runtime), so the hooks block in it is set by

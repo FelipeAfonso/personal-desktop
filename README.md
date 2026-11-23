@@ -20,7 +20,7 @@ etc/                              hand-edits under /etc: sddm autologin+theme, s
 usr/local/bin/                    root-owned scripts: dp-replug (fake a DP replug for the FO48U)
 bin/                              ~/.local/bin: review, unreview, secrets-pull, t3code launchers
 agents/                           global agent prompts (one per CLI + shared model table + miskatonic notes; export
-                                  generates ~/.claude/CLAUDE.md, ~/.codex/AGENTS.md,
+                                  generates ~/.claude/CLAUDE.md, ~/.gemini/config/AGENTS.md,
                                   ~/.config/opencode/AGENTS.md), vendored skills, unslop hooks
 systemd/user/                     custom user units: t3code server (+ its .service.d drop-ins), appimagekit entry hider
 hypr/ waybar/ dunst/ rofi/        Hyprland desktop (hyprland.lua — native Lua config, ≥0.55)
@@ -53,11 +53,12 @@ MangoHud/ xkb/                    custom XKB layout "cust"
   From that repo, run `python3 scripts/sync-agent-prompts.py ../personal-desktop`
   to check for drift. Add `--write` to copy updates onto a clean task branch.
   Commit the copies here, then deploy with `./export_current --agents-only`.
-  This includes all nine [tstack skills](agents/skills/tstack/README.md) and
+  This includes all eight [tstack skills](agents/skills/tstack/README.md) and
   the [nyarlathotep](agents/skills/nyarlathotep/SKILL.md) HEY email skill,
   and the [pr-review](agents/skills/pr-review/SKILL.md) skill that reviews
-  every PR on the Claude and Codex subscriptions,
-  installed into `~/.claude/skills/` and `~/.agents/skills/` with their helpers.
+  every PR on the Claude and Google AI subscriptions,
+  installed into `~/.claude/skills/`, `~/.agents/skills/`, and
+  `~/.gemini/config/skills/` with their helpers.
   This mode installs only agent instructions, references, vendored skills,
   and hook scripts. A normal export includes the same agent files. Edit the repo
   sources, not the generated files. Procedures in `agents/references/` install
@@ -116,8 +117,12 @@ MangoHud/ xkb/                    custom XKB layout "cust"
    `~/.bun/bin` on the service's PATH):
 
    ```sh
-   bun i -g @anthropic-ai/claude-code @openai/codex opencode-ai
+   bun i -g @anthropic-ai/claude-code opencode-ai
    ```
+
+   Neon runs through the Antigravity CLI (`agy`). Install it with
+   Antigravity's installer and run `agy` once to sign in with the Google AI
+   account.
 
    Global prompts, skills, and hook scripts were installed by
    `./export_current` in step 3; add the unslop hooks block to
